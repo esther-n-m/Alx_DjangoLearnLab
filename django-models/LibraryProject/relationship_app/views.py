@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
-
+from django.contrib.auth.decorators import permission_required
 
 # Function-Based View: List all books with authors
 def list_books(request):
@@ -74,3 +74,8 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+@permission_required('yourappname.can_add_book', raise_exception=True)
+def add_book(request):
+    # your code to add a book here
+    pass
