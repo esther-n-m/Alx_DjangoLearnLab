@@ -75,7 +75,17 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
-@permission_required('yourappname.can_add_book', raise_exception=True)
+@permission_required('relationship_app.can_add_book')
 def add_book(request):
-    # your code to add a book here
+    # your logic to add a book
+    pass
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_id):
+    # your logic to edit a book
+    pass
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    # your logic to delete a book
     pass
