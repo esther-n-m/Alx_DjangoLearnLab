@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render 
 from django.views.generic.detail import DetailView
 from .models import Book, Library
 from .models import Library
@@ -22,7 +22,7 @@ class LibraryDetailView(DetailView):
     context_object_name = 'library'        # Context variable in the template
 
 
-def register_view(request):
+def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -34,7 +34,7 @@ def register_view(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 
-def login_view(request):
+def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -47,6 +47,6 @@ def login_view(request):
 
 
 @login_required
-def logout_view(request):
+def logout(request):
     logout(request)
     return render(request, 'relationship_app/logout.html')
