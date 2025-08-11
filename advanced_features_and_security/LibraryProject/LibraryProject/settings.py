@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 ]
 
 # Custom user model
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 # For media files (profile photos)
 MEDIA_URL = '/media/'
