@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-coj9f_)fd$q6_88mkorx+7x%d3j@3dq#xg)*!vfqy&-5@kp@l2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -131,3 +131,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Enable browser XSS filtering
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent content sniffing by the browser
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Protect against clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+
+# Send CSRF cookie only over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# Send session cookie only over HTTPS
+SESSION_COOKIE_SECURE = True
+

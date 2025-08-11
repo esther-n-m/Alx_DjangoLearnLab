@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.decorators import permission_required
 from .models import Book
-
+from django.views.decorators.csrf import csrf_protect
 
 
 @permission_required('bookshelf.can_create')
@@ -25,3 +25,10 @@ def delete_book(request, book_id):
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'bookshelf/book_list.html', {'books': books})
+
+@csrf_protect
+def example_form_view(request):
+    if request.method == "POST":
+        # process form data here safely
+        pass
+    return render(request, 'bookshelf/form_example.html')
