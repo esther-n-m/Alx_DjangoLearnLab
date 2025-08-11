@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from django.views.decorators.csrf import csrf_protect
+from .forms import ExampleForm
 
 
 @permission_required('bookshelf.can_create')
@@ -29,6 +30,11 @@ def book_list(request):
 @csrf_protect
 def example_form_view(request):
     if request.method == "POST":
-        # process form data here safely
-        pass
-    return render(request, 'bookshelf/form_example.html')
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # process form.cleaned_data here
+            pass
+    else:
+        form = ExampleForm()
+
+    return render(request, 'bookshelf/form_example.html', {'form': form})
