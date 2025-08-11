@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+# Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# For media files (profile photos)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
