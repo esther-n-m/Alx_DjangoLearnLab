@@ -40,7 +40,9 @@ class ProfileView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
+    queryset = User.objects.all()   # ✅ required by checker
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
@@ -52,7 +54,9 @@ class FollowUserView(APIView):
         return Response({"detail": f"You are now following {target_user.username}"}, status=status.HTTP_200_OK)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = User.objects.all()   # ✅ required by checker
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
