@@ -29,16 +29,23 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        # Get the post or 404
-        post = generics.get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk)
 
-        # Create or get like
         like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
-            return Response({"message": "Post liked!"}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({"message": "You already liked this post."}, status=status.HTTP_200_OK)
+            # Create notification for the post author (but not for self-likes)
+            if post.author != request.user:
+                Notification.objects.create(
+                    recipient=post.author,
+                    actor=request.user,
+                    verb="liked your post",
+                    target=post,  # because you’re using GenericForeignKey
+                )
+
+            return Response({"message": "Post liked and notification sent!"}, status=status.HTTP_201_CREATED)
+
+        return Response({"message": "You already liked this post."}, status=status.HTTP_200_OK)
 
 class UnlikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
