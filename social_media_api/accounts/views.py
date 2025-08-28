@@ -2,25 +2,23 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
 
-from .models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
+from .models import CustomUser
 
 
 class RegisterView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer
-    queryset = CustomUser.objects.all()
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token, _ = Token.objects.get_or_create(user=user)
+            token = Token.objects.get(user=user)
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -28,7 +26,6 @@ class RegisterView(generics.GenericAPIView):
 class LoginView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
-    queryset = CustomUser.objects.all()
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -40,9 +37,8 @@ class LoginView(generics.GenericAPIView):
 
 
 class ProfileView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
-    queryset = CustomUser.objects.all()
 
     def get(self, request):
         serializer = self.get_serializer(request.user)
@@ -50,8 +46,7 @@ class ProfileView(generics.GenericAPIView):
 
 
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
@@ -64,8 +59,7 @@ class FollowUserView(generics.GenericAPIView):
 
 
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
