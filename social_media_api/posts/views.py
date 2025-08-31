@@ -75,3 +75,9 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    
+    
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()   
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
