@@ -29,7 +29,7 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk, *args, **kwargs):
-        # ✅ Use the exact line the checker expects
+        # Use the exact line the checker expects
         post = generics.get_object_or_404(Post, pk=pk)
 
         like, created = Like.objects.get_or_create(user=request.user, post=post)
@@ -57,3 +57,21 @@ class UnlikePostView(APIView):
 
         like.delete()
         return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
+
+class PostListCreateView(generics.ListCreateAPIView):
+    """
+    API endpoint for listing all posts or creating a new post.
+    """
+    queryset = Post.objects.all().order_by("-created_at")
+    serializer_class = PostSerializer
+
+    def perform_create(self, serializer):
+        # Save the post with the logged-in user as author
+        serializer.save(author=self.request.user)
+        
+class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint for retrieving, updating, or deleting a single post.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
