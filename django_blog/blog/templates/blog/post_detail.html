@@ -18,3 +18,46 @@
 
 <p><a href="{% url 'post-list' %}">← Back to posts</a></p>
 {% endblock %}
+
+<hr>
+
+<section id="comments">
+  <h3>Comments ({{ comments|length }})</h3>
+
+  {% if comments %}
+    <ul>
+      {% for c in comments %}
+        <li>
+          <p><strong>{{ c.author.username }}</strong> • {{ c.created_at|date:"M d, Y H:i" }}</p>
+          <p>{{ c.content|linebreaks }}</p>
+          {% if user == c.author %}
+            <p>
+              <a href="{% url 'comment-edit' c.pk %}">Edit</a> |
+              <a href="{% url 'comment-delete' c.pk %}">Delete</a>
+            </p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endif %}
+</section>
+
+<hr>
+
+<section id="add-comment">
+  <h3>Leave a comment</h3>
+  {% if user.is_authenticated %}
+    <form method="post">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit">Post Comment</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to comment.</p>
+  {% endif %}
+</section>
+
+<p><a href="{% url 'post-list' %}">← Back to posts</a></p>
+{% endblock %}
