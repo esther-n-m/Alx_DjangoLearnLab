@@ -15,9 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , include
+from django.urls import path
+
+from rest_framework import routers, viewsets
+from api.models import Author, Book
+from api.serializers import AuthorSerializer, BookSerializer
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+router = routers.DefaultRouter()
+router.register(r'authors', AuthorViewSet)
+router.register(r'books', BookViewSet)
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-]
+] + router.urls
