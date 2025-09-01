@@ -4,6 +4,9 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from rest_framework.test import APITestCase
+
 
 from .models import Author, Book
 
@@ -49,6 +52,16 @@ class BookAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["title"], "Things Fall Apart")
         self.assertEqual(response.data["publication_year"], 1958)
+        
+    def test_create_book_authenticated(self):
+        self.client.login(username="testuser", password="testpass123")
+        response = self.client.post("/books/create/", {
+            "title": "Test Book",
+            "publication_year": 2024,
+            "author": 1
+        })
+        self.assertEqual(response.status_code, 201)
+
 
     # ---------- CREATE (auth required) ----------
     def test_create_book_requires_auth(self):
